@@ -1,0 +1,19 @@
+.search {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border : 1px solid #ddd;
+}
+
+.title {
+    font-size: 1.6rem;
+}
+
+.form {
+    display: flex;
+}
+.formGroup {
+    display: flex;
+    gap: 1rem;
+}
