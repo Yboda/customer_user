@@ -1,6 +1,13 @@
 import {Table, TableBody, TableCell, TableHead, TableRow} from '@mui/material';
 
-export default function ByGenderAndMedicalInstitutionType({detailOpt}) {
+type Props = {
+  detailOpt: {
+    indicator: string;
+    yearList: string[];
+  };
+};
+
+export default function ByGenderAndMedicalInstitutionType({detailOpt}: Props) {
   const dataListToRender = dataList.filter(data => detailOpt.yearList.includes(data.year));
   return (
     <Table
@@ -22,53 +29,48 @@ export default function ByGenderAndMedicalInstitutionType({detailOpt}) {
           ))}
         </TableRow>
       </TableHead>
-      <TableBody
-        sx={{
-          borderTop: '2px solid #000',
-          '&:first-of-type': {
-            borderTop: 'none',
-          },
-        }}
-      >
-        {dataListToRender.map(data =>
-          Object.keys(data.data).map((genderKey, genderIndex) =>
-            Object.keys(data.data[genderKey]).map((hospitalKey, hospitalIndex) => (
-              <TableRow key={`data-row-${genderKey}-${genderIndex}-${hospitalIndex}`}>
-                {Object.keys(COLUMN_NAME).map(colName =>
-                  colName === 'year' ? (
-                    genderIndex === 0 &&
-                    hospitalIndex === 0 && (
-                      <TableCell key={`data-cell-year`} sx={{fontSize: '1.2rem'}} rowSpan={data.totalLength}>
-                        {data.year}
-                      </TableCell>
-                    )
-                  ) : colName === 'gender' ? (
-                    hospitalIndex === 0 && (
-                      <TableCell
-                        key={`data-cell-genderType-${genderIndex}`}
-                        sx={{fontSize: '1.2rem'}}
-                        rowSpan={Object.keys(data.data[genderKey]).length}
-                      >
-                        {GENDER_TYPES[genderKey]}
-                      </TableCell>
-                    )
-                  ) : colName === 'hospitalTypes' ? (
-                    <TableCell key={`hospitalType-${hospitalIndex}`} sx={{fontSize: '1.2rem'}}>
-                      {HOSPITAL_TYPES[hospitalKey]}
-                    </TableCell>
-                  ) : (
-                    <TableCell
-                      key={`data-cell-${genderKey}-${hospitalKey}-${colName}`}
-                      sx={{fontSize: '1.2rem'}}
-                    >
-                      {data.data[genderKey][hospitalKey][colName].toLocaleString()}
-                    </TableCell>
-                  ),
+      <TableBody>
+        {dataListToRender.map(data => {
+          let isFirstRowForYear = true;
+
+          return Object.entries(data.data).map(([genderKey, hospitalData], genderIndex) => {
+            let isFirstRowForGender = true;
+
+            return Object.entries(hospitalData).map(([hospitalKey, values], hospitalIndex) => (
+              <TableRow key={`${data.year}-${genderKey}-${hospitalKey}`}>
+                {/* Year cell */}
+                {isFirstRowForYear && (
+                  <TableCell sx={{fontSize: '1.2rem'}} rowSpan={data.totalLength}>
+                    {data.year}
+                  </TableCell>
                 )}
+                {(isFirstRowForYear = false)}
+
+                {/* Gender cell */}
+                {isFirstRowForGender && (
+                  <TableCell sx={{fontSize: '1.2rem'}} rowSpan={Object.keys(hospitalData).length}>
+                    {GENDER_TYPES[genderKey as keyof typeof GENDER_TYPES]}
+                  </TableCell>
+                )}
+                {(isFirstRowForGender = false)}
+
+                {/* Hospital type cell */}
+                <TableCell sx={{fontSize: '1.2rem'}}>
+                  {HOSPITAL_TYPES[hospitalKey as keyof typeof HOSPITAL_TYPES]}
+                </TableCell>
+
+                {/* Metrics cells */}
+                {Object.keys(COLUMN_NAME)
+                  .slice(3)
+                  .map(colName => (
+                    <TableCell key={`${colName}-${hospitalKey}-${genderKey}`} sx={{fontSize: '1.2rem'}}>
+                      {values[colName as keyof TValues].toLocaleString()}
+                    </TableCell>
+                  ))}
               </TableRow>
-            )),
-          ),
-        )}
+            ));
+          });
+        })}
       </TableBody>
     </Table>
   );
@@ -102,6 +104,14 @@ const HOSPITAL_TYPES = {
   normalClinic: '일반의원',
   dentalClinic: '치과의원',
   publicHealthCare: '공중보건의료업',
+};
+
+type TValues = {
+  medicalInstitutionsCtn: number;
+  doctorsCtn: number;
+  patientsCtn: number;
+  prescriptionsCtn: number;
+  prescriptionsAmount: number;
 };
 
 const dataList = [

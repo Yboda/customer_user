@@ -23,12 +23,12 @@ import ByAgeGroup from '@/app/statistics/_components/ByAgeGroup';
 import ByEfficacy from '@/app/statistics/_components/ByEfficacy';
 
 export default function Page() {
-  const [isSummary, setIsSummary] = useState(true);
-  const [summaryOpt, setSummaryOpt] = useState({
+  const [isSummary, setIsSummary] = useState<boolean>(true);
+  const [summaryOpt, setSummaryOpt] = useState<{searchType: string; year: string}>({
     searchType: 'summary',
     year: '2024',
   });
-  const [detailOpt, setDetailOpt] = useState({
+  const [detailOpt, setDetailOpt] = useState<{indicator: string; yearList: string[]}>({
     indicator: '100201',
     yearList: ['2023'],
   });
@@ -44,12 +44,12 @@ export default function Page() {
     }
   };
 
-  const handleChange = (event: SelectChangeEvent<typeof detailOpt>) => {
+  const handleChange = (event: SelectChangeEvent<typeof detailOpt.yearList>) => {
     const {
       target: {value},
     } = event;
     setDetailOpt(prev => {
-      return {...prev, yearList: [...value]};
+      return {...prev, yearList: [...(value as string[])]};
     });
     console.log(value);
     // console.log(detailOpt);
@@ -79,7 +79,7 @@ export default function Page() {
                 id='select-year'
                 label='year'
                 defaultValue={YEAR_LIST[0]}
-                onChange={e => setSummaryOpt({...summaryOpt, year: e.target.value})}
+                onChange={e => setSummaryOpt({...summaryOpt, year: e.target.value as string})}
               >
                 {YEAR_LIST.map(year => (
                   <MenuItem key={year} value={year}>
@@ -93,7 +93,7 @@ export default function Page() {
                 id='select-board'
                 label='board'
                 defaultValue={'100201'}
-                onChange={e => setDetailOpt({...detailOpt, indicator: e.target.value})}
+                onChange={e => setDetailOpt({...detailOpt, indicator: e.target.value as string})}
               >
                 <MenuItem value='100201'>의료기관 종별 의료용 마약류 처방 현황</MenuItem>
                 <MenuItem value='100202'>환자 성별 및 의료기관 종별 의료용 마약류 처방 현황</MenuItem>

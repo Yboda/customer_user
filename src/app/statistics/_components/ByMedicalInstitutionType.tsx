@@ -1,6 +1,13 @@
 import {Table, TableBody, TableCell, TableHead, TableRow} from '@mui/material';
 
-export default function ByMedicalInstitutionType({detailOpt}) {
+type Props = {
+  detailOpt: {
+    indicator: string;
+    yearList: string[];
+  };
+};
+
+export default function ByMedicalInstitutionType({detailOpt}: Props) {
   const dataListToRender = dataList.filter(data => detailOpt.yearList.includes(data.year));
   return (
     <Table
@@ -46,10 +53,13 @@ export default function ByMedicalInstitutionType({detailOpt}) {
                   )
                 ) : colName === 'hospitalTypes' ? (
                   <TableCell key={`data-cell-hospitalType-${hospitalIndex}`} sx={{fontSize: '1.2rem'}}>
-                    {HOSPITAL_TYPES[hospitalKey]}
+                    {HOSPITAL_TYPES[hospitalKey as keyof typeof HOSPITAL_TYPES]}
                   </TableCell>
                 ) : (
-                  <TableCell key={`data-cell-${hospitalKey}-${hospitalIndex}-${colName}`} sx={{fontSize: '1.2rem'}}>
+                  <TableCell
+                    key={`data-cell-${hospitalKey}-${hospitalIndex}-${colName}`}
+                    sx={{fontSize: '1.2rem'}}
+                  >
                     {data.data[hospitalKey][colName].toLocaleString()}
                   </TableCell>
                 ),
