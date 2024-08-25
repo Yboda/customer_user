@@ -30,37 +30,33 @@ export default function ByMedicalInstitutionType({detailOpt}) {
           },
         }}
       >
-        {dataListToRender.map(data => (
-          <>
-            {/* 의료기관 종류만큼 tr 반복 / 안에서 header만큼 td반복 */}
-            {/* 첫 행에서만 year 출력 및 rowSpan 설정 */}
-            {Object.keys(HOSPITAL_TYPES).map((type, rowIndex) => (
-              <TableRow key={`data-row-${data.id}-${rowIndex}`}>
-                {Object.keys(COLUMN_NAME).map(key =>
-                  key === 'year' ? (
-                    rowIndex === 0 ? (
-                      <TableCell
-                        key={`year-${rowIndex}`}
-                        sx={{fontSize: '1.2rem'}}
-                        rowSpan={Object.keys(HOSPITAL_TYPES).length}
-                      >
-                        {data['year']}
-                      </TableCell>
-                    ) : null
-                  ) : key === 'hospitalTypes' ? (
-                    <TableCell key={`hospitalTypes`} sx={{fontSize: '1.2rem'}}>
-                      {HOSPITAL_TYPES[type]}
+        {dataListToRender.map(data =>
+          Object.keys(data.data).map((hospitalKey, hospitalIndex) => (
+            <TableRow key={`data-row-${data.id}-${hospitalIndex}`}>
+              {Object.keys(COLUMN_NAME).map((colName, index) =>
+                colName === 'year' ? (
+                  hospitalIndex === 0 && (
+                    <TableCell
+                      key={`data-cell-year`}
+                      sx={{fontSize: '1.2rem'}}
+                      rowSpan={Object.keys(HOSPITAL_TYPES).length}
+                    >
+                      {data['year']}
                     </TableCell>
-                  ) : (
-                    <TableCell key={key} sx={{fontSize: '1.2rem'}}>
-                      {data[type][key].toLocaleString()}
-                    </TableCell>
-                  ),
-                )}
-              </TableRow>
-            ))}
-          </>
-        ))}
+                  )
+                ) : colName === 'hospitalTypes' ? (
+                  <TableCell key={`data-cell-hospitalType-${hospitalIndex}`} sx={{fontSize: '1.2rem'}}>
+                    {HOSPITAL_TYPES[hospitalKey]}
+                  </TableCell>
+                ) : (
+                  <TableCell key={`data-cell-${hospitalKey}-${hospitalIndex}-${colName}`} sx={{fontSize: '1.2rem'}}>
+                    {data.data[hospitalKey][colName].toLocaleString()}
+                  </TableCell>
+                ),
+              )}
+            </TableRow>
+          )),
+        )}
       </TableBody>
     </Table>
   );
@@ -102,135 +98,139 @@ const dataList = [
   {
     id: 1,
     year: '2023',
-    total: {
-      medicalInstitutionsCtn: 41242,
-      doctorsCtn: 108325,
-      patientsCtn: 19906120,
-      prescriptionsCtn: 103458692,
-      prescriptionsAmount: 1894113909,
-    },
-    general: {
-      medicalInstitutionsCtn: 386,
-      doctorsCtn: 42737,
-      patientsCtn: 6598385,
-      prescriptionsCtn: 34852510,
-      prescriptionsAmount: 462734089,
-    },
-    normal: {
-      medicalInstitutionsCtn: 41242,
-      doctorsCtn: 108325,
-      patientsCtn: 19906120,
-      prescriptionsCtn: 103458692,
-      prescriptionsAmount: 1894113909,
-    },
-    nursing: {
-      medicalInstitutionsCtn: 386,
-      doctorsCtn: 42737,
-      patientsCtn: 6598385,
-      prescriptionsCtn: 34852510,
-      prescriptionsAmount: 462734089,
-    },
-    dental: {
-      medicalInstitutionsCtn: 41242,
-      doctorsCtn: 108325,
-      patientsCtn: 19906120,
-      prescriptionsCtn: 103458692,
-      prescriptionsAmount: 1894113909,
-    },
-    koreanMedicine: {
-      medicalInstitutionsCtn: 41242,
-      doctorsCtn: 108325,
-      patientsCtn: 19906120,
-      prescriptionsCtn: 103458692,
-      prescriptionsAmount: 1894113909,
-    },
-    normalClinic: {
-      medicalInstitutionsCtn: 41242,
-      doctorsCtn: 108325,
-      patientsCtn: 19906120,
-      prescriptionsCtn: 103458692,
-      prescriptionsAmount: 1894113909,
-    },
-    dentalClinic: {
-      medicalInstitutionsCtn: 41242,
-      doctorsCtn: 108325,
-      patientsCtn: 19906120,
-      prescriptionsCtn: 103458692,
-      prescriptionsAmount: 1894113909,
-    },
-    publicHealthCare: {
-      medicalInstitutionsCtn: 41242,
-      doctorsCtn: 108325,
-      patientsCtn: 19906120,
-      prescriptionsCtn: 103458692,
-      prescriptionsAmount: 1894113909,
+    data: {
+      total: {
+        medicalInstitutionsCtn: 41242,
+        doctorsCtn: 108325,
+        patientsCtn: 19906120,
+        prescriptionsCtn: 103458692,
+        prescriptionsAmount: 1894113909,
+      },
+      general: {
+        medicalInstitutionsCtn: 386,
+        doctorsCtn: 42737,
+        patientsCtn: 6598385,
+        prescriptionsCtn: 34852510,
+        prescriptionsAmount: 462734089,
+      },
+      normal: {
+        medicalInstitutionsCtn: 41242,
+        doctorsCtn: 108325,
+        patientsCtn: 19906120,
+        prescriptionsCtn: 103458692,
+        prescriptionsAmount: 1894113909,
+      },
+      nursing: {
+        medicalInstitutionsCtn: 386,
+        doctorsCtn: 42737,
+        patientsCtn: 6598385,
+        prescriptionsCtn: 34852510,
+        prescriptionsAmount: 462734089,
+      },
+      dental: {
+        medicalInstitutionsCtn: 41242,
+        doctorsCtn: 108325,
+        patientsCtn: 19906120,
+        prescriptionsCtn: 103458692,
+        prescriptionsAmount: 1894113909,
+      },
+      koreanMedicine: {
+        medicalInstitutionsCtn: 41242,
+        doctorsCtn: 108325,
+        patientsCtn: 19906120,
+        prescriptionsCtn: 103458692,
+        prescriptionsAmount: 1894113909,
+      },
+      normalClinic: {
+        medicalInstitutionsCtn: 41242,
+        doctorsCtn: 108325,
+        patientsCtn: 19906120,
+        prescriptionsCtn: 103458692,
+        prescriptionsAmount: 1894113909,
+      },
+      dentalClinic: {
+        medicalInstitutionsCtn: 41242,
+        doctorsCtn: 108325,
+        patientsCtn: 19906120,
+        prescriptionsCtn: 103458692,
+        prescriptionsAmount: 1894113909,
+      },
+      publicHealthCare: {
+        medicalInstitutionsCtn: 41242,
+        doctorsCtn: 108325,
+        patientsCtn: 19906120,
+        prescriptionsCtn: 103458692,
+        prescriptionsAmount: 1894113909,
+      },
     },
   },
   {
     id: 2,
     year: '2022',
-    total: {
-      medicalInstitutionsCtn: 41242,
-      doctorsCtn: 108325,
-      patientsCtn: 19906120,
-      prescriptionsCtn: 103458692,
-      prescriptionsAmount: 1894113909,
-    },
-    general: {
-      medicalInstitutionsCtn: 386,
-      doctorsCtn: 42737,
-      patientsCtn: 6598385,
-      prescriptionsCtn: 34852510,
-      prescriptionsAmount: 462734089,
-    },
-    normal: {
-      medicalInstitutionsCtn: 41242,
-      doctorsCtn: 108325,
-      patientsCtn: 19906120,
-      prescriptionsCtn: 103458692,
-      prescriptionsAmount: 1894113909,
-    },
-    nursing: {
-      medicalInstitutionsCtn: 386,
-      doctorsCtn: 42737,
-      patientsCtn: 6598385,
-      prescriptionsCtn: 34852510,
-      prescriptionsAmount: 462734089,
-    },
-    dental: {
-      medicalInstitutionsCtn: 41242,
-      doctorsCtn: 108325,
-      patientsCtn: 19906120,
-      prescriptionsCtn: 103458692,
-      prescriptionsAmount: 1894113909,
-    },
-    koreanMedicine: {
-      medicalInstitutionsCtn: 41242,
-      doctorsCtn: 108325,
-      patientsCtn: 19906120,
-      prescriptionsCtn: 103458692,
-      prescriptionsAmount: 1894113909,
-    },
-    normalClinic: {
-      medicalInstitutionsCtn: 41242,
-      doctorsCtn: 108325,
-      patientsCtn: 19906120,
-      prescriptionsCtn: 103458692,
-      prescriptionsAmount: 1894113909,
-    },
-    dentalClinic: {
-      medicalInstitutionsCtn: 41242,
-      doctorsCtn: 108325,
-      patientsCtn: 19906120,
-      prescriptionsCtn: 103458692,
-      prescriptionsAmount: 1894113909,
-    },
-    publicHealthCare: {
-      medicalInstitutionsCtn: 41242,
-      doctorsCtn: 108325,
-      patientsCtn: 19906120,
-      prescriptionsCtn: 103458692,
-      prescriptionsAmount: 1894113909,
+    data: {
+      total: {
+        medicalInstitutionsCtn: 41242,
+        doctorsCtn: 108325,
+        patientsCtn: 19906120,
+        prescriptionsCtn: 103458692,
+        prescriptionsAmount: 1894113909,
+      },
+      general: {
+        medicalInstitutionsCtn: 386,
+        doctorsCtn: 42737,
+        patientsCtn: 6598385,
+        prescriptionsCtn: 34852510,
+        prescriptionsAmount: 462734089,
+      },
+      normal: {
+        medicalInstitutionsCtn: 41242,
+        doctorsCtn: 108325,
+        patientsCtn: 19906120,
+        prescriptionsCtn: 103458692,
+        prescriptionsAmount: 1894113909,
+      },
+      nursing: {
+        medicalInstitutionsCtn: 386,
+        doctorsCtn: 42737,
+        patientsCtn: 6598385,
+        prescriptionsCtn: 34852510,
+        prescriptionsAmount: 462734089,
+      },
+      dental: {
+        medicalInstitutionsCtn: 41242,
+        doctorsCtn: 108325,
+        patientsCtn: 19906120,
+        prescriptionsCtn: 103458692,
+        prescriptionsAmount: 1894113909,
+      },
+      koreanMedicine: {
+        medicalInstitutionsCtn: 41242,
+        doctorsCtn: 108325,
+        patientsCtn: 19906120,
+        prescriptionsCtn: 103458692,
+        prescriptionsAmount: 1894113909,
+      },
+      normalClinic: {
+        medicalInstitutionsCtn: 41242,
+        doctorsCtn: 108325,
+        patientsCtn: 19906120,
+        prescriptionsCtn: 103458692,
+        prescriptionsAmount: 1894113909,
+      },
+      dentalClinic: {
+        medicalInstitutionsCtn: 41242,
+        doctorsCtn: 108325,
+        patientsCtn: 19906120,
+        prescriptionsCtn: 103458692,
+        prescriptionsAmount: 1894113909,
+      },
+      publicHealthCare: {
+        medicalInstitutionsCtn: 41242,
+        doctorsCtn: 108325,
+        patientsCtn: 19906120,
+        prescriptionsCtn: 103458692,
+        prescriptionsAmount: 1894113909,
+      },
     },
   },
 ];

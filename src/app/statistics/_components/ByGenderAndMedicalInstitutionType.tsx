@@ -30,22 +30,45 @@ export default function ByGenderAndMedicalInstitutionType({detailOpt}) {
           },
         }}
       >
-        {dataListToRender.map(data => (
-          <>
-            <TableCell sx={{fontSize: '1.2rem'}} rowSpan={data.totalLength}>
-              {data.year}
-            </TableCell>
-            {Object.keys(GENDER_TYPES).map(genderKey => (
-              <TableCell
-                key={genderKey}
-                sx={{fontSize: '1.2rem'}}
-                rowSpan={Object.keys(data.data[genderKey]).length}
-              >
-                {GENDER_TYPES[genderKey]}
-              </TableCell>
-            ))}
-          </>
-        ))}
+        {dataListToRender.map(data =>
+          Object.keys(data.data).map((genderKey, genderIndex) =>
+            Object.keys(data.data[genderKey]).map((hospitalKey, hospitalIndex) => (
+              <TableRow key={`data-row-${genderKey}-${genderIndex}-${hospitalIndex}`}>
+                {Object.keys(COLUMN_NAME).map(colName =>
+                  colName === 'year' ? (
+                    genderIndex === 0 &&
+                    hospitalIndex === 0 && (
+                      <TableCell key={`data-cell-year`} sx={{fontSize: '1.2rem'}} rowSpan={data.totalLength}>
+                        {data.year}
+                      </TableCell>
+                    )
+                  ) : colName === 'gender' ? (
+                    hospitalIndex === 0 && (
+                      <TableCell
+                        key={`data-cell-genderType-${genderIndex}`}
+                        sx={{fontSize: '1.2rem'}}
+                        rowSpan={Object.keys(data.data[genderKey]).length}
+                      >
+                        {GENDER_TYPES[genderKey]}
+                      </TableCell>
+                    )
+                  ) : colName === 'hospitalTypes' ? (
+                    <TableCell key={`hospitalType-${hospitalIndex}`} sx={{fontSize: '1.2rem'}}>
+                      {HOSPITAL_TYPES[hospitalKey]}
+                    </TableCell>
+                  ) : (
+                    <TableCell
+                      key={`data-cell-${genderKey}-${hospitalKey}-${colName}`}
+                      sx={{fontSize: '1.2rem'}}
+                    >
+                      {data.data[genderKey][hospitalKey][colName].toLocaleString()}
+                    </TableCell>
+                  ),
+                )}
+              </TableRow>
+            )),
+          ),
+        )}
       </TableBody>
     </Table>
   );
