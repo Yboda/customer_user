@@ -33,10 +33,10 @@ export default function ByGenderAndMedicalInstitutionType({detailOpt}: Props) {
         {dataListToRender.map(data => {
           let isFirstRowForYear = true;
 
-          return Object.entries(data.data).map(([genderKey, hospitalData], genderIndex) => {
+          return Object.entries(data.data).map(([genderKey, genderData], genderIndex) => {
             let isFirstRowForGender = true;
 
-            return Object.entries(hospitalData).map(([hospitalKey, values], hospitalIndex) => (
+            return Object.entries(genderData).map(([hospitalKey, hospitalData], hospitalIndex) => (
               <TableRow key={`${data.year}-${genderKey}-${hospitalKey}`}>
                 {/* Year cell */}
                 {isFirstRowForYear && (
@@ -48,7 +48,7 @@ export default function ByGenderAndMedicalInstitutionType({detailOpt}: Props) {
 
                 {/* Gender cell */}
                 {isFirstRowForGender && (
-                  <TableCell sx={{fontSize: '1.2rem'}} rowSpan={Object.keys(hospitalData).length}>
+                  <TableCell sx={{fontSize: '1.2rem'}} rowSpan={Object.keys(genderData).length}>
                     {GENDER_TYPES[genderKey as keyof typeof GENDER_TYPES]}
                   </TableCell>
                 )}
@@ -64,7 +64,7 @@ export default function ByGenderAndMedicalInstitutionType({detailOpt}: Props) {
                   .slice(3)
                   .map(colName => (
                     <TableCell key={`${colName}-${hospitalKey}-${genderKey}`} sx={{fontSize: '1.2rem'}}>
-                      {values[colName as keyof TValues].toLocaleString()}
+                      {hospitalData[colName as keyof TValues].toLocaleString()}
                     </TableCell>
                   ))}
               </TableRow>
@@ -75,6 +75,17 @@ export default function ByGenderAndMedicalInstitutionType({detailOpt}: Props) {
     </Table>
   );
 }
+
+// const COLUMNS = [
+//   {id: 'year', label: '시점', rowSpanKey: 'year'},
+//   {id: 'gender', label: '성별', rowSpanKey: 'gender'},
+//   {id: 'hospitalType', label: '의료기관 종별(1)'},
+//   {id: 'medicalInstitutionsCtn', label: '처방기관수 (개소)'},
+//   {id: 'doctorsCtn', label: '처방의사수 (명)'},
+//   {id: 'patientsCtn', label: '환자수 (명)'},
+//   {id: 'prescriptionsCtn', label: '처방건수 (건)'},
+//   {id: 'prescriptionsAmount', label: '처방량 (개/정)'},
+// ];
 
 const COLUMN_NAME = {
   year: '시점',

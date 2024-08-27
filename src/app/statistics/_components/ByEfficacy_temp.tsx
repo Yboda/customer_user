@@ -8,110 +8,84 @@ type Props = {
 };
 
 export default function ByEfficacy({detailOpt}: Props) {
-  const dataListToRender = dataList.filter(data => detailOpt.yearList.includes(data.year));
+  // const dataListToRender = dataList.filter(data => detailOpt.yearList.includes(data.year));
 
-  console.log('dataListToRender', dataListToRender);
   return (
-    <Table
-      sx={{
-        border: '1px solid #000',
-        '& .MuiTableCell-root': {
-          borderColor: '#000',
-          borderRight: '1px solid #000',
-          textAlign: 'center',
-        },
-      }}
-    >
-      <TableHead>
-        <TableRow>
-          {COLUMNS.map(column =>
-            !column.subColumns ? (
-              <TableCell key={column.id} sx={{fontSize: '1.2rem'}} rowSpan={2}>
-                {column.label}
-              </TableCell>
-            ) : (
-              dataListToRender.map(data => (
-                <TableCell key={column.id} sx={{fontSize: '1.2rem'}} colSpan={column.subColumns.length}>
-                  {data.year}
-                </TableCell>
-              ))
-            ),
-          )}
-        </TableRow>
-        <TableRow>
-          {dataListToRender.map(data =>
-            COLUMNS.map(column =>
-              column.subColumns?.map(subColumn => (
-                <TableCell key={subColumn.id} sx={{fontSize: '1.2rem'}}>
-                  {subColumn.label}
-                </TableCell>
-              )),
-            ),
-          )}
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {Object.entries(dataListToRender[0].data).map(([mainKey, mainData], mainIdx) => {
-          return Object.entries(mainData).map(([subKey, subData], subIdx) => {
-            return Object.entries(subData).map(([detailKey, datailData], detailIdx) => {
-              return (
+    <>
+      <Table
+        sx={{
+          border: '1px solid #000',
+          '& .MuiTableCell-root': {
+            borderColor: '#000',
+            borderRight: '1px solid #000',
+            textAlign: 'center',
+          },
+        }}
+      >
+        <TableHead>
+          <TableRow>
+            {Object.values(COLUMNS_FOR_NAME).map(column => (
+              <TableCell key={column}>{column}</TableCell>
+            ))}
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {Object.entries(DETAIL_CATEGORY_NAMES).map(([mainKey, mainList], mainIdx) => {
+            return Object.entries(mainList).map(([subKey, subList], subIdx) => {
+              return Object.entries(subList).map(([detailKey, detail], detailIdx) => (
                 <TableRow>
-                  {/* Main Type Names */}
-                  {subIdx === 0 && (
-                    <TableCell sx={{fontSize: '1.2rem'}} rowSpan={15}>
-                      {MAIN_CATEGORY[mainKey]}
-                    </TableCell>
+                  {subIdx === 0 && detailIdx === 0 && (
+                    <TableCell rowSpan={getTotalLength(mainKey)}>{MAIN_CATEGORY[mainKey]}</TableCell>
                   )}
 
-                  {/* Sub Type Names */}
                   {detailIdx === 0 && (
-                    <TableCell sx={{fontSize: '1.2rem'}} rowSpan={Object.keys(subData).length}>
-                      {SUB_CATEGORY[subKey]}
-                    </TableCell>
+                    <TableCell rowSpan={Object.keys(subList).length}>{SUB_CATEGORY[subKey]}</TableCell>
                   )}
-
-                  {/* Detail Names */}
-                  <TableCell sx={{fontSize: '1.2rem'}}>
-                    {DETAIL_CATEGORY_NAMES[mainKey][subKey][detailKey]}
-                  </TableCell>
-
-                  {dataListToRender.map(data => {
-                    return Object.keys(COLUMN_NAME).map(column => {
-                      const detail = data.data[mainKey][subKey][detailKey][column];
-                      return <TableCell sx={{fontSize: '1.2rem'}}>{detail}</TableCell>;
-                    });
-                  })}
+                  <TableCell>{detail}</TableCell>
                 </TableRow>
-              );
+              ));
             });
-          });
-        })}
-      </TableBody>
-    </Table>
+          })}
+        </TableBody>
+      </Table>
+      {/* DATA TABLE */}
+      <RenderDataTable yearList={detailOpt.yearList} />
+    </>
   );
 }
 
-const COLUMNS = [
-  {id: 'mainCategory', label: '효능 및 성분별(1)'},
-  {id: 'subCategory', label: '효능 및 성분별(2)'},
-  {id: 'detailCategory', label: '효능 및 성분별(3)'},
-  {
-    id: 'year',
-    label: '',
-    subColumns: [
-      {id: 'medicalInstitutionsCtn', label: '처방기관수 (개소)'},
-      {id: 'doctorsCtn', label: '처방의사수 (명)'},
-      {id: 'patientsCtn', label: '환자수 (명)'},
-      {id: 'prescriptionsCtn', label: '처방건수 (건)'},
-      {id: 'prescriptionsAmount', label: '처방량 (개/정)'},
-    ],
-  },
-];
+const RenderDataTable = ({yearList}: {yearList: string[]}) => {
+  return (
+    <>
+      {/*<Table*/}
+      {/*  sx={{*/}
+      {/*    border: '1px solid #000',*/}
+      {/*    '& .MuiTableCell-root': {*/}
+      {/*      borderColor: '#000',*/}
+      {/*      borderRight: '1px solid #000',*/}
+      {/*      textAlign: 'center',*/}
+      {/*    },*/}
+      {/*  }}*/}
+      {/*>*/}
+      {/*  <TableHead>*/}
+      {/*    <TableRow></TableRow>*/}
+      {/*    <TableRow></TableRow>*/}
+      {/*  </TableHead>*/}
+      {/*  <TableBody>*/}
+      {/*    <TableRow></TableRow>*/}
+      {/*  </TableBody>*/}
+      {/*</Table>*/}
+    </>
+  );
+};
 
-const COLUMN_NAME = {
-  // mainCategory: '효능 및 성분별(1)',
-  // subCategory: '효능 및 성분별(2)',
-  // detailCategory: '효능 및 성분별(3)',
+const COLUMNS_FOR_NAME = {
+  mainCategory: '효능 및 성분별(1)',
+  subCategory: '효능 및 성분별(2)',
+  detailCategory: '효능 및 성분별(3)',
+};
+
+const COLUMNS = {
   medicalInstitutionsCtn: '처방기관수 (개소)',
   doctorsCtn: '처방의사수 (명)',
   patientsCtn: '환자수 (명)',
@@ -147,7 +121,9 @@ const getTotalLength = mainKey => {
 
 const DETAIL_CATEGORY_NAMES = {
   analgesic: {
-    total: {total: '소계'},
+    total: {
+      total: '소계',
+    },
     drugs: {
       total: '소계',
       dihydrocodeine: '디히드로코데인',
@@ -200,7 +176,7 @@ const DETAIL_CATEGORY_NAMES = {
     },
   },
   anesthetic: {
-    total: '소계',
+    total: {total: '소계'},
     drugs: {
       total: '소계',
       remifentanil: '레미펜타닐',
@@ -217,7 +193,7 @@ const DETAIL_CATEGORY_NAMES = {
     },
   },
   AppetiteSuppressant: {
-    total: '소계',
+    total: {total: '소계'},
     psychotropicDrugs: {
       total: '소계',
       lorcaserin: '로카세린',
@@ -228,7 +204,7 @@ const DETAIL_CATEGORY_NAMES = {
     },
   },
   coughMedicine: {
-    total: '소계',
+    total: {total: '소계'},
     drugs: {
       total: '소계',
       codeine: '코데인',
@@ -240,7 +216,7 @@ const DETAIL_CATEGORY_NAMES = {
     },
   },
   antiepilepticDrugs: {
-    total: '소계',
+    total: {total: '소계'},
     psychotropicDrugs: {
       total: '소계',
       clonazepam: '클로나제팜',
@@ -248,14 +224,14 @@ const DETAIL_CATEGORY_NAMES = {
     },
   },
   ADHDMedicine: {
-    total: '소계',
+    total: {total: '소계'},
     psychotropicDrugs: {
       total: '소계',
       methylphenidate: '메틸페니데이트',
     },
   },
   antidepressants: {
-    total: '소계',
+    total: {total: '소계'},
     psychotropicDrugs: {
       total: '소계',
       esketamine: '에스케타민',

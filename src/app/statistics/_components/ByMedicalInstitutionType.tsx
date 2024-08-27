@@ -94,15 +94,13 @@ const HOSPITAL_TYPES = {
   publicHealthCare: '공중보건의료업',
 };
 
-// const COLUMN_NAME = new Map([
-//   ['year', '시점'],
-//   ['hospitalTypes', '의료기관 종별(1)'],
-//   ['medicalInstitutionsCtn', '처방기관수 (개소)'],
-//   ['doctorsCtn', '처방의사수 (명)'],
-//   ['patientsCtn', '환자수 (명)'],
-//   ['prescriptionsCtn', '처방건수 (건)'],
-//   ['prescriptionsAmount', '처방량 (개/정)'],
-// ]);
+type TValues = {
+  medicalInstitutionsCtn: number;
+  doctorsCtn: number;
+  patientsCtn: number;
+  prescriptionsCtn: number;
+  prescriptionsAmount: number;
+};
 
 const dataList = [
   {

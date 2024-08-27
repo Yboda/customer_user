@@ -78,6 +78,7 @@ export default function Page() {
                 displayEmpty
                 id='select-year'
                 label='year'
+                c
                 defaultValue={YEAR_LIST[0]}
                 onChange={e => setSummaryOpt({...summaryOpt, year: e.target.value as string})}
               >
