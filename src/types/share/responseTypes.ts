@@ -6,9 +6,10 @@ export interface IArticle {
   writer: string;
   createTm: string;
   typeName: string;
-  fileDTOList?: any[];
-  category: string;
+  fileDTOList?: any[] | null;
+  // category: string;
   badge: boolean;
   department: string;
   manager: string;
+  thumbnail?: any;
 }

@@ -4,50 +4,67 @@ import {Save as SaveIcon, AttachFile as AttachFileIcon} from '@mui/icons-materia
 import {useParams, usePathname, useRouter} from 'next/navigation';
 import {Button} from '@mui/material';
 import {useFetchArticleDetail} from '@/hooks/share/useFetchArticleDetail';
+import Image from 'next/image';
 
 const DetailPage = () => {
   const router = useRouter();
   const path = usePathname();
   const articleId = Number(useParams()?.id as string);
 
-  const {data: article} = useFetchArticleDetail();
+  const {data: article} = useFetchArticleDetail(Number(articleId));
 
   return (
     <Container>
       <h3>게시글상세</h3>
-      <div className={'detail-header'}>
-        <div className={'detail-info'}>
-          <span className={'detail-category'}>{article?.category}</span>
-          <div className={'detail-titleWrap'}>
-            <div className={'detail-title'}>
-              <span className={'title'}>
+      <div className={'detail-topArea'}>
+        <div className={'detail-header'}>
+          <div className={'detail-header-titleWrap'}>
+            <div className={'detail-header-title'}>
+              <span className={`title ${article?.badge ? 'new' : ''}`}>
                 {article?.title}
                 {article?.badge && <div className={'badge'}>NEW</div>}
               </span>
             </div>
-            <div className={'detail-more'}>
-              <span>담당부서: {article?.department}</span>
-              <span>담당자: {article?.manager}</span>
-              <span>조회수: {article?.count}</span>
-              <span>작성일: {article?.createTm}</span>
+            <div className={'detail-header-info'}>
+              <div className={'info-wrap'}>
+                <div className={'info-item'}>
+                  <Image src={'/assets/person.svg'} alt={'person'} width={14} height={14} />
+                  <span className={'info-title'}>담당부서</span>
+                  <span>{article?.department}</span>
+                </div>
+                <div className={'info-item'}>
+                  <Image src={'/assets/person.svg'} alt={'person'} width={14} height={14} />
+                  <span className={'info-title'}>담당자</span>
+                  <span>{article?.manager}</span>
+                </div>
+              </div>
+              <div className={'info-item'}>
+                <Image src={'/assets/view.svg'} alt={'view'} width={14} height={14} />
+                <span className={'info-title'}>조회수</span>
+                <span>{article?.count}</span>
+              </div>
+              <div className={'info-item'}>
+                <Image src={'/assets/calendar.svg'} alt={'calendar'} width={14} height={14} />
+                <span className={'info-title'}>작성일</span>
+                <span>{article?.createTm}</span>
+              </div>
             </div>
           </div>
         </div>
-        <div className={'detail-headerIcon'}>
-          {article?.fileDTOList && article.fileDTOList.length > 0 && <SaveIcon />}
+        <div className={'detail-content'}>
+          <div dangerouslySetInnerHTML={{__html: article?.content!}} />
         </div>
       </div>
-      <div className={'detail-content'}>
-        <div dangerouslySetInnerHTML={{__html: article?.content!}} />
-      </div>
-      <div className={'detail-fileArea'}>
-        {article?.fileDTOList?.map(file => (
-          <div key={file.id} className={'detail-file'}>
-            <AttachFileIcon />
-            <span>{file.fileName}</span>
-          </div>
-        ))}
-      </div>
+      {article?.fileDTOList && (
+        <div className={'detail-fileArea'}>
+          {article?.fileDTOList?.map(file => (
+            <div key={file.id} className={'detail-file'}>
+              <Image src={'/assets/file-link.svg'} alt={'file'} width={12} height={12} />
+              <span>{file.fileName}</span>
+            </div>
+          ))}
+        </div>
+      )}
       <div className={'detail-btnWrap'}>
         <Button onClick={() => router.back()}>목록</Button>
       </div>
@@ -66,103 +83,126 @@ const Container = styled.div`
   }
 
   .detail {
+    &-topArea {
+      border-radius: 18px;
+      overflow: hidden;
+      background-color: rgba(255, 255, 255, 0.45);
+    }
     &-header {
       display: flex;
-      justify-content: space-between;
-      padding: 1rem 0;
-      border-top: 1px solid #bbb;
-      border-bottom: 1px solid #bbb;
+      padding: 1.6rem;
+      background-color: #fff;
+
+      &-titleWrap {
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+      }
+
+      &-title {
+        display: flex;
+        width: auto;
+
+        .title {
+          display: -webkit-box;
+          overflow: hidden;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          font-weight: bold;
+          font-size: 1.4rem;
+          color: rgba(10, 15, 56, 0.9);
+
+          &.new {
+            color: #045fc9;
+          }
+        }
+        .badge {
+          display: inline-flex;
+          text-align: center;
+          width: auto;
+          margin-left: 0.5rem;
+          padding: 0.2rem 0.6rem;
+          background-color: #ff5151;
+          color: #fff;
+          font-size: 1.4rem;
+          font-weight: 600;
+          flex-shrink: 0;
+          border-radius: 3px;
+        }
+      }
+      &-info {
+        display: flex;
+        align-items: center;
+        gap: 3.2rem;
+        .info {
+          &-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+          }
+          &-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            color: rgba(10, 15, 56, 0.72);
+            font-size: 1.4rem;
+            font-weight: 500;
+
+            img {
+              width: 1.4rem;
+              height: 1.4rem;
+            }
+          }
+          &-title {
+            font-weight: 700;
+          }
+        }
+      }
     }
+
     &-content {
       width: 100%;
-      padding: 2rem;
+      padding: 2.4rem;
+      font-size: 1.5rem;
+      color: rgba(10, 15, 56, 0.9);
       * {
-        font-size: 1.3rem;
       }
-    }
-    &-info {
-      display: flex;
     }
 
-    &-category {
-      flex-shrink: 0;
-      padding: 0 3rem;
-      font-size: 1.4rem;
-    }
-
-    &-titleWrap {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    &-title {
-      display: flex;
-      width: auto;
-
-      .title {
-        display: -webkit-box;
-        overflow: hidden;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
-        font-weight: bold;
-        font-size: 1.4rem;
-      }
-      .badge {
-        display: inline-block;
-        text-align: center;
-        width: 4rem;
-        margin-left: 1rem;
-        padding: 0.3rem;
-        background-color: #000;
-        color: #fff;
-        font-size: 1.1rem;
-        flex: 0;
-      }
-    }
-    &-more {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      span {
-        font-size: 1.3rem;
-      }
-    }
-    &-headerIcon {
-      .MuiSvgIcon-root {
-        width: 2rem;
-        height: 2rem;
-        margin: 0 2rem;
-      }
-    }
     &-fileArea {
       display: flex;
       flex-direction: column;
-      gap: 1rem;
-      margin: 1rem;
-      padding: 2rem;
-      background-color: #ddd;
+      background-color: #c9d6e4;
+      border-radius: 8px;
+      margin-top: 1.7rem;
+      color: #223475;
+      font-size: 1.4rem;
+      font-weight: 600;
     }
 
     &-file {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
+      padding: 0.8rem;
+      gap: 0.4rem;
       width: fit-content;
       cursor: pointer;
       span {
         font-size: 1.3rem;
       }
-      .MuiSvgIcon-root {
-        width: 1.5rem;
-        height: 1.5rem;
+      img {
+        width: 1.12rem;
+        height: 1.12rem;
+        padding: 0.64rem;
+        flex-shrink: 0;
       }
     }
     &-btnWrap {
       display: flex;
       justify-content: center;
-      padding-top: 2rem;
-      border-top: 1px solid #bbb;
+      padding: 2rem 0;
 
       button {
         background-color: #000;

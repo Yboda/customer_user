@@ -8,7 +8,7 @@ export const useFetchArticleDetail = (id?: number) => {
     queryKey: ['article', id],
     queryFn: async () => {
       try {
-        const data: IArticle = await Apis.ShareApi.getArticleDetail();
+        const data: IArticle = await Apis.ShareApi.getArticleDetail(id);
         return data;
       } catch (e) {
         console.log(e);

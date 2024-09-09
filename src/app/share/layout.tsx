@@ -1,11 +1,5 @@
+import ContentLayout from '@/app/share/_components/ContentLayout';
+
 export default function Layout({children}: {children: React.ReactNode}) {
-  return (
-    <div
-      style={{
-        height: 'calc(100vh - 5rem)',
-      }}
-    >
-      {children}
-    </div>
-  );
+  return <ContentLayout title={'지식정보'}>{children}</ContentLayout>;
 }

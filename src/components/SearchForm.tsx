@@ -3,6 +3,7 @@ import {Box, InputBase, MenuItem, Select, FormControl, TextField, Typography, Bu
 import styled from '@emotion/styled';
 import {Widgets as WidgetsIcon, List as ListIcon, Apps as AppsIcon} from '@mui/icons-material';
 import {MutableRefObject} from 'react';
+import Image from 'next/image';
 
 type Props = {
   keywordRef: MutableRefObject<HTMLInputElement | undefined>;
@@ -23,7 +24,6 @@ export default function SearchForm({
 }: Props) {
   return (
     <SearchStyle.Container>
-      <SearchStyle.Title>메뉴명</SearchStyle.Title>
       <form onSubmit={onSubmitHandler}>
         <SearchStyle.FormBox>
           <SearchStyle.Select
@@ -51,13 +51,17 @@ export default function SearchForm({
           </SearchStyle.Select>
           <SearchStyle.InputBox>
             <SearchStyle.Input placeholder={'검색어를 입력해 주세요.'} inputProps={{ref: keywordRef}} />
-            <SearchIcon />
+            <Image src={'/assets/search.svg'} alt={'search'} width={18} height={18} />
           </SearchStyle.InputBox>
           <SearchStyle.SubmitBtn type={'submit'}>검색</SearchStyle.SubmitBtn>
         </SearchStyle.FormBox>
       </form>
       <SearchStyle.ChangeViewBtn type={'button'} onClick={() => setIsListType(prev => !prev)}>
-        {isListType ? <AppsIcon /> : <ListIcon />}
+        {isListType ? (
+          <Image src={'/assets/toggle-card.svg'} alt={'toggleToList'} width={30} height={30} />
+        ) : (
+          <Image src={'/assets/toggle-list.svg'} alt={'toggleToCard'} width={30} height={30} />
+        )}
       </SearchStyle.ChangeViewBtn>
     </SearchStyle.Container>
   );
@@ -68,26 +72,17 @@ const SearchStyle = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: '1rem',
-    border: '1px solid #bbb',
-    backgroundColor: '#ddd',
+    padding: '1.6rem',
     '.MuiSvgIcon-root': {
       width: '2.4rem',
       height: '2.4rem',
     },
   }),
-  Title: styled(Typography)({
-    display: 'inline-flex',
-    alignItems: 'center',
-    fontSize: '1.6rem',
-    fontWeight: 'bold',
-  }),
   FormBox: styled(Box)({
     display: 'flex',
     justifyContent: 'center',
-    gap: '.5rem',
+    gap: '1rem',
     width: '60rem',
-    padding: '1rem',
   }),
   Select: styled(Select)({
     boxShadow: 'none',
@@ -110,6 +105,13 @@ const SearchStyle = {
       top: `calc(50% - 1.2rem)`,
       right: '1rem',
     },
+    img: {
+      position: 'absolute',
+      top: 'calc(50% - 0.9rem)',
+      right: '1rem',
+      width: '1.8rem',
+      height: '1.8rem',
+    },
   }),
   Input: styled(InputBase)({
     width: '30rem',
@@ -124,14 +126,25 @@ const SearchStyle = {
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: '1rem',
+    padding: '.4rem 3rem',
+    fontSize: '1.6rem',
+    fontWeight: 600,
     color: '#fff',
-    backgroundColor: '#000',
+    backgroundColor: 'rgba(4, 95, 201, 1)',
+    fontFamily: 'Pretendard',
     '&:hover': {
-      backgroundColor: 'rgba(0,0,0,0.6)',
+      backgroundColor: 'rgba(4, 95, 201, 0.7)',
     },
   }),
   ChangeViewBtn: styled(Button)({
-    color: '#000',
+    display: 'inline-flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 0,
+    minWidth: 'unset',
+    img: {
+      width: '3rem',
+      height: '3rem',
+    },
   }),
 };

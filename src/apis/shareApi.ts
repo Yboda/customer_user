@@ -29,7 +29,7 @@ export const ShareApi = {
       // const res = await request.get<ResponseType<IArticle>>(`/article/${id}`);
       // console.log('articleDetailRes---->', res.data);
       // return res.data;
-      return testArticle;
+      return testArticleList.list.find(article => article.id === id);
     } catch (e) {
       console.log(e);
     }

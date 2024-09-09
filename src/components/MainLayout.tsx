@@ -18,12 +18,10 @@ const Container = styled.div`
   min-height: 100vh;
 
   .content-layout {
-    position: absolute;
-    top: 5rem;
-    left: 50%;
-    width: 100%;
-    max-width: 1400px;
-    height: auto;
-    transform: translateX(-50%);
+    //max-width: 1400px;
+    min-height: calc(100vh - 5rem);
+    //transform: translateX(-50%);
+    padding: 0 4rem;
+    background-color: rgba(223, 229, 234, 1);
   }
 `;

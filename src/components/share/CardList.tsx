@@ -24,24 +24,26 @@ export default function CardList({articles}: {articles: IArticle[]}) {
 
 const Container = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 1rem;
-  padding: 1rem;
-  border: 1px solid #bbb;
+
   @media (max-width: 1400px) {
+    grid-template-columns: repeat(5, 1fr);
   }
 
-  @media (max-width: 1200px) {
+  @media (max-width: 1150px) {
+    grid-template-columns: repeat(4, 1fr);
   }
 
-  @media (max-width: 992px) {
+  @media (max-width: 900px) {
     grid-template-columns: repeat(3, 1fr);
   }
-
-  @media (max-width: 768px) {
+  //
+  @media (max-width: 600px) {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  @media (max-width: 576px) {
-  }
+  //@media (max-width: 576px) {
+  //  grid-template-columns: 1fr;
+  //}
 `;

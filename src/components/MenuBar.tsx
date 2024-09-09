@@ -62,9 +62,6 @@ const RenderMenuList = ({menu, depthLevel}: {menu: IMenu; depthLevel: number}) =
 };
 
 const Container = styled.nav`
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 5rem;
   background-color: #7daee4;
